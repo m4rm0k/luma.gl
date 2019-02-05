@@ -2,7 +2,7 @@ import GL from '@luma.gl/constants';
 import Resource from './resource';
 import Accessor from './accessor';
 import {assertWebGL2Context, getGLTypeFromTypedArray, getTypedArrayFromGLType} from '../utils';
-import {log, assert, checkProps} from '../../utils';
+import {log, checkProps, isObjectEmpty, assert} from '../../utils';
 
 const DEBUG_DATA_LENGTH = 10;
 
@@ -83,8 +83,9 @@ export default class Buffer extends Resource {
     this.usage = props.usage || GL.STATIC_DRAW;
     this.debugData = null;
 
-    // Deprecated: Merge main props and accessor
-    this.setAccessor(Object.assign({}, props, props.accessor));
+    // Deprecated: Merge any acccessor props from main props into accessor
+    const accessor = Object.assign({}, props, props.accessor);
+    this.setAccessor(accessor);
 
     // Set data: (re)initializes the buffer
     if (props.data) {
@@ -112,11 +113,13 @@ export default class Buffer extends Resource {
     // NOTE: From luma.gl v7.0, Accessors have an optional `buffer `field
     // (mainly to support "interleaving")
     // To avoid confusion, ensure `buffer.accessor` does not have a `buffer.accessor.buffer` field:
+    assert(!accessor.buffer || accessor.buffer === this);
     accessor = Object.assign({}, accessor);
     delete accessor.buffer;
 
-    // This new statement ensures that an "accessor object" is re-packaged as an Accessor instance
-    this.accessor = new Accessor(accessor);
+    // The new statement ensures that an "accessor object" is re-packaged as an Accessor instance
+    // If no accessor fields, set accessor to null
+    this.accessor = isObjectEmpty(accessor) ? null : new Accessor(accessor);
     return this;
   }
 
@@ -389,6 +392,7 @@ export default class Buffer extends Resource {
   }
 
   // DEPRECATIONS - v6.0
+
   // Deprecated in v6.x, but not warnings not properly implemented
   setByteLength(byteLength) {
     log.deprecated('setByteLength', 'reallocate')();
@@ -397,7 +401,7 @@ export default class Buffer extends Resource {
 
   // Deprecated in v6.x, but not warnings not properly implemented
   updateAccessor(opts) {
-    log.deprecated('updateAccessor(...)', 'setAccessor(new Accessor(buffer.accessor, ...)')();
+    // log.deprecated('updateAccessor(...)', 'setAccessor(new Accessor(buffer.accessor, ...)')();
     this.accessor = new Accessor(this.accessor, opts);
     return this;
   }

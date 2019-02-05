@@ -50,6 +50,7 @@ module.exports = {
   ADDITIONAL_LINKS: [],
 
   EXAMPLES: [
+<<<<<<< HEAD
     {
       title: 'Instancing',
       path: 'examples/core/instancing/',

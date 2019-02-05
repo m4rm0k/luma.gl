@@ -34,6 +34,7 @@ export default class Model extends BaseModel {
 
     // assert(program || program instanceof Program);
     assert(this.drawMode !== undefined && Number.isFinite(this.vertexCount), ERR_MODEL_PARAMS);
+    return this;
   }
   /* eslint-enable max-statements */
 
@@ -46,6 +47,7 @@ export default class Model extends BaseModel {
 
   destroy() {
     this.delete();
+    return this;
   }
 
   // GETTERS
