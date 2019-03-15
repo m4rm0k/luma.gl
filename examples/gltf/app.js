@@ -1,11 +1,20 @@
 import {GLTFParser} from '@loaders.gl/gltf';
 import {DracoDecoder} from '@loaders.gl/draco';
-import {AnimationLoop, setParameters, clear, createGLTFObjects, log} from 'luma.gl';
+import {
+  AnimationLoop,
+  setParameters,
+  clear,
+  createGLTFObjects,
+  _GLTFEnvironment as GLTFEnvironment,
+  log
+} from 'luma.gl';
 import {Matrix4, radians} from 'math.gl';
 import document from 'global/document';
 
 export const GLTF_BASE_URL =
   'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/';
+const GLTF_ENV_BASE_URL =
+  'https://raw.githubusercontent.com/KhronosGroup/glTF-WebGL-PBR/master/textures';
 const GLTF_MODEL_INDEX = `${GLTF_BASE_URL}model-index.json`;
 
 const INFO_HTML = `
@@ -138,7 +147,7 @@ const LIGHT_SOURCES = {
 
 const DEFAULT_OPTIONS = {
   pbrDebug: true,
-  pbrIbl: true,
+  imageBasedLighting: false,
   lights: false
 };
 
@@ -275,13 +284,19 @@ export class DemoApp {
     });
 
     this.loadOptions = Object.assign({}, DEFAULT_OPTIONS);
+    this.environment = new GLTFEnvironment(gl, {
+      brdfLutUrl: `${GLTF_ENV_BASE_URL}/brdfLUT.png`,
+      getTexUrl: (type, dir, mipLevel) =>
+        `${GLTF_ENV_BASE_URL}/papermill/${type}/${type}_${dir}_${mipLevel}.jpg`
+    });
+    this.loadOptions.imageBasedLighting = this.environment;
 
     this.gl = gl;
     if (this.modelFile) {
       // options for unit testing
       const options = {
         pbrDebug: false,
-        pbrIbl: false,
+        imageBasedLighting: false,
         lights: true
       };
       loadGLTF(this.modelFile, this.gl, options).then(result => Object.assign(this, result));
@@ -331,21 +346,21 @@ export class DemoApp {
     switch (value) {
       case 'exclusive':
         Object.assign(this.loadOptions, {
-          pbrIbl: true,
+          imageBasedLighting: this.environment,
           lights: false
         });
         break;
 
       case 'addition':
         Object.assign(this.loadOptions, {
-          pbrIbl: true,
+          imageBasedLighting: this.environment,
           lights: true
         });
         break;
 
       case 'off':
         Object.assign(this.loadOptions, {
-          pbrIbl: false,
+          imageBasedLighting: false,
           lights: true
         });
         break;

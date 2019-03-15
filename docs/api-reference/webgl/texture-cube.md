@@ -21,6 +21,20 @@ const textureCube = new TextureCube(gl, {width, height, dataFormat, pixels: {
 }});
 ```
 
+Creating a `TextureCube` using multiple level-of-detail (LODs) images.
+```js
+const textureCube = new TextureCube(gl, {width, height, dataFormat, pixels: {
+  [GL.TEXTURE_CUBE_MAP_POSITIVE_X]: [imagePosX_LOD_0, imagePosX_LOD_1, imagePosX_LOD_2],
+  [GL.TEXTURE_CUBE_MAP_POSITIVE_Y]: [imagePosY_LOD_0, imagePosY_LOD_1, imagePosY_LOD_2],
+  [GL.TEXTURE_CUBE_MAP_POSITIVE_Z]: [imagePosZ_LOD_0, imagePosZ_LOD_1, imagePosZ_LOD_2],
+  [GL.TEXTURE_CUBE_MAP_NEGATIVE_X]: [imageNegX_LOD_0, imageNegX_LOD_1, imageNegX_LOD_2],
+  [GL.TEXTURE_CUBE_MAP_NEGATIVE_Y]: [imageNegY_LOD_0, imageNegY_LOD_1, imageNegY_LOD_2],
+  [GL.TEXTURE_CUBE_MAP_NEGATIVE_Z]: [imageNegZ_LOD_0, imageNegZ_LOD_1, imageNegZ_LOD_2]
+}});
+```
+
+This class supports _Async Textures_. You can provide promises instead of images on all methods.
+
 Replacing one or more faces texture data
 ```js
 textureCube.setCubeMapImageData({width, height, dataFormat, pixels: {

@@ -81,6 +81,7 @@ export {default as Group} from './scenegraph/group';
 export {default as Camera} from './scenegraph/camera';
 export {default as Model} from './scenegraph/model';
 export {default as createGLTFObjects} from './scenegraph/gltf/create-gltf-objects';
+export {default as _GLTFEnvironment} from './scenegraph/gltf/gltf-environment';
 
 // Multipass Rendering
 export {default as _MultiPassRenderer} from './multipass/multi-pass-renderer';
