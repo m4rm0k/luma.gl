@@ -1,4 +1,5 @@
 const resolve = require('path').resolve;
+// eslint-disable-next-line import/no-extraneous-dependencies
 const ALIASES = require('ocular-dev-tools/config/ocular.config')({
   root: resolve(__dirname, '..')
 }).aliases;
@@ -50,7 +51,6 @@ module.exports = {
   ADDITIONAL_LINKS: [],
 
   EXAMPLES: [
-<<<<<<< HEAD
     {
       title: 'Instancing',
       path: 'examples/core/instancing/',

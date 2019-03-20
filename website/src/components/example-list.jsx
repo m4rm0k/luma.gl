@@ -15,8 +15,6 @@ import Texture3D from '../../../examples/core/texture-3d/app';
 import Transform from '../../../examples/core/transform/app';
 import TransformFeedback from '../../../examples/core/transform-feedback/app';
 
-import GLTF from '../../../examples/gltf/app';
-
 import Lesson01 from '../../../examples/lessons/01/app';
 import Lesson02 from '../../../examples/lessons/02/app';
 import Lesson03 from '../../../examples/lessons/03/app';
